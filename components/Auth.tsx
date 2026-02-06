@@ -63,7 +63,7 @@ export const Auth: React.FC<AuthProps> = ({ onLogin }) => {
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
       <div className="max-w-md w-full">
         <div className="text-center mb-10">
-          <div className="w-20 h-20 bg-indigo-600 rounded-3xl flex items-center justify-center text-white shadow-2xl mx-auto mb-6 rotate-3">
+          <div className="w-20 h-20 bg-slate-700 rounded-3xl flex items-center justify-center text-white shadow-2xl mx-auto mb-6 rotate-3">
             <svg xmlns="http://www.w3.org/2000/svg" className="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/>
             </svg>
@@ -86,7 +86,7 @@ export const Auth: React.FC<AuthProps> = ({ onLogin }) => {
                     value={phone}
                     onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
                     placeholder="Enter mobile number"
-                    className="w-full bg-slate-50 border border-slate-200 p-4 pl-16 rounded-2xl outline-none focus:ring-4 ring-indigo-500/10 transition-all font-bold text-lg"
+                    className="w-full bg-slate-50 border border-slate-200 p-4 pl-16 rounded-2xl outline-none focus:ring-4 ring-slate-400/10 transition-all font-bold text-lg"
                     maxLength={10}
                     required
                   />
@@ -98,7 +98,7 @@ export const Auth: React.FC<AuthProps> = ({ onLogin }) => {
               <button 
                 type="submit"
                 disabled={loading || phone.length < 10}
-                className="w-full py-5 bg-indigo-600 text-white rounded-2xl font-black text-lg shadow-xl shadow-indigo-100 hover:bg-indigo-700 active:scale-95 transition-all disabled:opacity-50"
+                className="w-full py-5 bg-slate-700 text-white rounded-2xl font-black text-lg shadow-xl shadow-slate-200 hover:bg-slate-800 active:scale-95 transition-all disabled:opacity-50"
               >
                 {loading ? "Sending..." : "Request OTP"}
               </button>
@@ -118,7 +118,7 @@ export const Auth: React.FC<AuthProps> = ({ onLogin }) => {
                     type="number"
                     value={digit}
                     onChange={(e) => handleOtpChange(e.target.value, idx)}
-                    className="w-full aspect-square bg-slate-50 border-2 border-slate-100 rounded-xl text-center font-black text-xl focus:border-indigo-500 focus:bg-white transition-all outline-none"
+                    className="w-full aspect-square bg-slate-50 border-2 border-slate-100 rounded-xl text-center font-black text-xl focus:border-slate-500 focus:bg-white transition-all outline-none"
                     required
                   />
                 ))}
@@ -129,7 +129,7 @@ export const Auth: React.FC<AuthProps> = ({ onLogin }) => {
               <button 
                 type="submit"
                 disabled={loading || otp.some(v => v === '')}
-                className="w-full py-5 bg-indigo-600 text-white rounded-2xl font-black text-lg shadow-xl shadow-indigo-100 hover:bg-indigo-700 active:scale-95 transition-all disabled:opacity-50"
+                className="w-full py-5 bg-slate-700 text-white rounded-2xl font-black text-lg shadow-xl shadow-slate-200 hover:bg-slate-800 active:scale-95 transition-all disabled:opacity-50"
               >
                 {loading ? "Verifying..." : "Verify & Enter"}
               </button>
@@ -137,7 +137,7 @@ export const Auth: React.FC<AuthProps> = ({ onLogin }) => {
               <button 
                 type="button"
                 onClick={() => setStep('phone')}
-                className="w-full text-xs font-bold text-slate-400 hover:text-indigo-600 transition-colors"
+                className="w-full text-xs font-bold text-slate-400 hover:text-slate-600 transition-colors"
               >
                 Use a different number
               </button>

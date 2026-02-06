@@ -1,7 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { TargetAudience, InventoryItem, DashboardStats, User, UserFeedback, HealthSensitivity } from './types';
-import { analyzeProductImage } from './services/geminiService';
+import { analyzeProductImage, analyzeProductInfo } from './services/geminiService';
+import { fetchProductInfoByBarcode } from './services/barcodeService';
 import { dbService } from './services/dbService';
 import { Scanner } from './components/Scanner';
 import { Dashboard } from './components/Dashboard';
@@ -29,7 +30,7 @@ const FeedbackModal: React.FC<{
             <select 
               value={type} 
               onChange={(e) => setType(e.target.value as UserFeedback['type'])}
-              className="w-full bg-slate-50 border border-slate-200 p-3 rounded-xl outline-none focus:ring-2 ring-indigo-500/20"
+              className="w-full bg-slate-50 border border-slate-200 p-3 rounded-xl outline-none focus:ring-2 ring-slate-400/20"
             >
               <option value="Incorrect Expiry">Incorrect Expiry</option>
               <option value="Missed Allergen">Missed Allergen</option>
@@ -43,7 +44,7 @@ const FeedbackModal: React.FC<{
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               placeholder="Explain what the AI missed..."
-              className="w-full bg-slate-50 border border-slate-200 p-3 rounded-xl h-24 outline-none focus:ring-2 ring-indigo-500/20 resize-none"
+              className="w-full bg-slate-50 border border-slate-200 p-3 rounded-xl h-24 outline-none focus:ring-2 ring-slate-400/20 resize-none"
             />
           </div>
         </div>
@@ -52,7 +53,7 @@ const FeedbackModal: React.FC<{
           <button onClick={onClose} className="flex-1 py-3 font-bold text-slate-500 hover:bg-slate-50 rounded-2xl transition-all">Cancel</button>
           <button 
             onClick={() => onSubmit({ type, comment })}
-            className="flex-1 py-3 bg-indigo-600 text-white font-bold rounded-2xl hover:bg-indigo-700 shadow-xl shadow-indigo-200 transition-all"
+            className="flex-1 py-3 bg-slate-700 text-white font-bold rounded-2xl hover:bg-slate-800 shadow-xl shadow-slate-300 transition-all"
           >
             Submit Feedback
           </button>
@@ -69,11 +70,11 @@ const ComplianceDetail: React.FC<{ item: InventoryItem; onReport: () => void }> 
         <div>
           <div className="flex items-center justify-between mb-4 sm:mb-6">
             <h4 className="text-[10px] sm:text-sm font-black text-slate-400 uppercase tracking-widest">Regional Regulation Audit</h4>
-            <span className="text-[10px] bg-indigo-600 text-white px-3 py-1 rounded-full font-black shadow-lg shadow-indigo-100">{item.detectedRegion}</span>
+            <span className="text-[10px] bg-slate-700 text-white px-3 py-1 rounded-full font-black shadow-lg shadow-slate-200">{item.detectedRegion}</span>
           </div>
           <div className="space-y-3 sm:space-y-4">
             {item.detailedChecklist.map((check, idx) => (
-              <div key={idx} className="flex items-start gap-3 sm:gap-4 p-4 bg-white rounded-2xl border border-slate-200 shadow-sm hover:border-indigo-200 transition-colors">
+              <div key={idx} className="flex items-start gap-3 sm:gap-4 p-4 bg-white rounded-2xl border border-slate-200 shadow-sm hover:border-slate-300 transition-colors">
                 <div className={`mt-1 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${
                   check.status === 'Passed' ? 'bg-emerald-100 text-emerald-600' : 
                   check.status === 'Failed' ? 'bg-red-100 text-red-600' : 'bg-amber-100 text-amber-600'
@@ -151,7 +152,7 @@ const ComplianceDetail: React.FC<{ item: InventoryItem; onReport: () => void }> 
 
             <button 
               onClick={onReport}
-              className="w-full py-3 border-2 border-dashed border-slate-200 text-slate-400 hover:border-indigo-300 hover:text-indigo-500 font-bold text-xs rounded-2xl transition-all flex items-center justify-center gap-2"
+              className="w-full py-3 border-2 border-dashed border-slate-200 text-slate-400 hover:border-slate-300 hover:text-slate-600 font-bold text-xs rounded-2xl transition-all flex items-center justify-center gap-2"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
               Report Audit Correction
@@ -168,7 +169,9 @@ const App: React.FC = () => {
   const [inventory, setInventory] = useState<InventoryItem[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showScanner, setShowScanner] = useState(false);
+  const [scanMode, setScanMode] = useState<'label' | 'barcode'>('label');
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [expandedIngredients, setExpandedIngredients] = useState<Record<string, boolean>>({});
   const [feedbackItem, setFeedbackItem] = useState<InventoryItem | null>(null);
 
   useEffect(() => {
@@ -253,6 +256,49 @@ const App: React.FC = () => {
     }
   };
 
+  const createBarcodePlaceholder = (barcode: string) => {
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="320" height="240">
+      <rect width="100%" height="100%" fill="#f1f5f9"/>
+      <rect x="40" y="60" width="240" height="120" fill="#e2e8f0" rx="16"/>
+      <text x="160" y="115" font-size="14" text-anchor="middle" fill="#64748b" font-family="Arial, sans-serif">Barcode</text>
+      <text x="160" y="140" font-size="12" text-anchor="middle" fill="#94a3b8" font-family="Arial, sans-serif">${barcode}</text>
+    </svg>`;
+    return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+  };
+
+  const handleBarcodeScan = async (barcode: string, previewUrl?: string) => {
+    if (!user) return;
+    setIsProcessing(true);
+    try {
+      const productInfo = await fetchProductInfoByBarcode(barcode);
+      const result = await analyzeProductInfo({
+        barcode: productInfo.barcode,
+        productName: productInfo.productName,
+        brand: productInfo.brand,
+        ingredientsText: productInfo.ingredientsText,
+        categories: productInfo.categories,
+        imageUrl: productInfo.imageUrl,
+        expirationDate: productInfo.expirationDate,
+        quantity: productInfo.quantity,
+        countries: productInfo.countries
+      });
+      const newItem: InventoryItem = {
+        ...result,
+        id: 'aud_' + Math.random().toString(36).substr(2, 9),
+        addedAt: Date.now(),
+        imageUrl: productInfo.imageUrl || previewUrl || createBarcodePlaceholder(barcode)
+      };
+      setInventory(prev => [newItem, ...prev]);
+      setShowScanner(false);
+      await dbService.saveItem(user.id, newItem);
+    } catch (error: any) {
+      console.error("Full Error Object:", error);
+      alert(error.message || "Barcode audit failed. Try a clearer scan.");
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
   const submitFeedback = async (f: { type: UserFeedback['type'], comment: string }) => {
     if (!feedbackItem || !user) return;
     const feedback: UserFeedback = {
@@ -275,6 +321,11 @@ const App: React.FC = () => {
     if (!user) return;
     await dbService.deleteItem(user.id, id);
     setInventory(prev => prev.filter(item => item.id !== id));
+  };
+
+  const toggleIngredients = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setExpandedIngredients(prev => ({ ...prev, [id]: !prev[id] }));
   };
 
   if (!user) return <Auth onLogin={handleLogin} />;
@@ -315,7 +366,7 @@ const App: React.FC = () => {
       <nav className="sticky top-0 z-[60] bg-white border-b border-slate-200 shadow-sm px-4 py-3">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-lg rotate-3">
+            <div className="w-10 h-10 bg-slate-700 rounded-2xl flex items-center justify-center text-white shadow-lg rotate-3">
               <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/>
               </svg>
@@ -333,23 +384,49 @@ const App: React.FC = () => {
 
       <main className="max-w-7xl mx-auto px-4 py-8">
         <div className="mb-8">
-          <h2 className="text-3xl font-black text-slate-900 tracking-tight leading-none mb-2">Inventory <span className="text-indigo-600">Audit</span></h2>
+          <h2 className="text-3xl font-black text-slate-900 tracking-tight leading-none mb-2">Inventory <span className="text-slate-700">Audit</span></h2>
           <p className="text-slate-500 text-xs font-medium">Production mobile compliance infrastructure.</p>
         </div>
 
         {showScanner ? (
           <div className="mb-10 animate-in zoom-in duration-300">
-            <Scanner onScan={handleScan} isProcessing={isProcessing} />
+            <Scanner
+              onScan={handleScan}
+              onBarcodeScan={handleBarcodeScan}
+              isProcessing={isProcessing}
+              initialMode={scanMode}
+            />
             <button onClick={() => setShowScanner(false)} className="w-full mt-4 text-xs font-bold text-slate-400">Cancel Scan</button>
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-3 mb-10">
-            <button onClick={() => setShowScanner(true)} className="col-span-2 bg-indigo-600 text-white font-black py-5 rounded-3xl shadow-xl flex items-center justify-center gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              Scan Product
+            <button
+              onClick={() => {
+                setScanMode('label');
+                setShowScanner(true);
+              }}
+              className="bg-slate-700 text-white font-black py-5 rounded-3xl shadow-xl flex items-center justify-center gap-3"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                <path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                <path d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              Image Upload
+            </button>
+            <button
+              onClick={() => {
+                setScanMode('barcode');
+                setShowScanner(true);
+              }}
+              className="bg-white border border-slate-200 text-slate-600 font-bold py-5 rounded-3xl shadow-sm flex items-center justify-center gap-3"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                <path d="M3 7h2v10H3M7 7v10m4-10v10m4-10v10m4-10h2v10h-2" />
+              </svg>
+              Barcode Scanner
             </button>
             <button onClick={downloadReport} className="bg-white border border-slate-200 text-slate-600 font-bold py-4 rounded-3xl text-xs">Export Report</button>
-            <div className="bg-indigo-50 border border-indigo-100 rounded-3xl flex items-center justify-center text-indigo-600 font-black text-sm">{inventory.length} SKUs</div>
+            <div className="bg-slate-100 border border-slate-200 rounded-3xl flex items-center justify-center text-slate-700 font-black text-sm">{inventory.length} SKUs</div>
           </div>
         )}
 
@@ -382,14 +459,28 @@ const App: React.FC = () => {
                       </div>
                       
                       <div className="flex flex-wrap gap-1">
-                        {item.ingredients.slice(0, 3).map((ing, i) => (
-                          <span key={i} className={`text-[8px] font-bold px-1.5 py-0.5 rounded border ${
-                            item.riskyIngredients.some(ri => ri.name.toLowerCase() === ing.toLowerCase())
-                              ? 'bg-amber-100 border-amber-300 text-amber-700'
-                              : 'bg-slate-50 border-slate-100 text-slate-400'
-                          }`}>{ing}</span>
+                        {(expandedIngredients[item.id] ? item.ingredients : item.ingredients.slice(0, 3)).map((ing, i) => (
+                          <span
+                            key={`${item.id}-${i}`}
+                            className={`text-[9px] font-black px-1.5 py-0.5 rounded border ${
+                              item.riskyIngredients.some(ri => ri.name.toLowerCase() === ing.toLowerCase())
+                                ? 'bg-amber-100 border-amber-300 text-amber-800'
+                                : 'bg-slate-50 border-slate-200 text-slate-700'
+                            }`}
+                          >
+                            {ing}
+                          </span>
                         ))}
-                        {item.ingredients.length > 3 && <span className="text-[8px] font-bold text-slate-300">+{item.ingredients.length - 3}</span>}
+                        {item.ingredients.length > 3 && (
+                          <button
+                            onClick={(e) => toggleIngredients(item.id, e)}
+                            className="text-[9px] font-black text-slate-500 hover:text-slate-700"
+                          >
+                            {expandedIngredients[item.id]
+                              ? "Show less"
+                              : `+${item.ingredients.length - 3}`}
+                          </button>
+                        )}
                       </div>
                     </div>
 

@@ -55,7 +55,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ stats }) => {
             <span className="text-xs text-slate-600">Ingredient Risks</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-indigo-500"></div>
+          <div className="w-3 h-3 rounded-full bg-slate-500"></div>
             <span className="text-xs text-slate-600">Reg. Violations</span>
           </div>
         </div>
