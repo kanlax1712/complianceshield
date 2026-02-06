@@ -172,7 +172,7 @@ export const Scanner: React.FC<ScannerProps> = ({ onScan, onBarcodeScan, isProce
   };
 
   return (
-    <div className="w-full max-w-xl mx-auto p-6 bg-white rounded-3xl shadow-xl border border-slate-100">
+    <div className="w-full max-w-xl mx-auto p-6 surface rounded-3xl shadow-xl border border-white/10">
       <div className="flex flex-col items-center gap-6">
         <div className="w-full grid grid-cols-2 gap-3">
           <button
@@ -182,8 +182,8 @@ export const Scanner: React.FC<ScannerProps> = ({ onScan, onBarcodeScan, isProce
               setPreviewUrl(null);
               stopCamera();
             }}
-            className={`py-3 rounded-2xl text-xs font-bold border flex items-center justify-center gap-2 ${
-              scanMode === 'label' ? 'bg-slate-700 text-white border-slate-700' : 'bg-white text-slate-500 border-slate-200'
+            className={`glass-button py-3 rounded-2xl text-xs font-bold border flex items-center justify-center gap-2 ${
+              scanMode === 'label' ? 'bg-cyan-300 text-slate-900 border-cyan-300' : 'bg-white/10 text-white/70 border-white/10'
             }`}
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -198,8 +198,8 @@ export const Scanner: React.FC<ScannerProps> = ({ onScan, onBarcodeScan, isProce
               setBarcodeStatus(null);
               setPreviewUrl(null);
             }}
-            className={`py-3 rounded-2xl text-xs font-bold border flex items-center justify-center gap-2 ${
-              scanMode === 'barcode' ? 'bg-slate-700 text-white border-slate-700' : 'bg-white text-slate-500 border-slate-200'
+            className={`glass-button py-3 rounded-2xl text-xs font-bold border flex items-center justify-center gap-2 ${
+              scanMode === 'barcode' ? 'bg-cyan-300 text-slate-900 border-cyan-300' : 'bg-white/10 text-white/70 border-white/10'
             }`}
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -212,13 +212,13 @@ export const Scanner: React.FC<ScannerProps> = ({ onScan, onBarcodeScan, isProce
         {scanMode === 'label' ? (
           <>
             <div 
-              className="relative w-full aspect-video rounded-2xl bg-slate-100 flex items-center justify-center border-2 border-dashed border-slate-300 overflow-hidden group cursor-pointer hover:border-slate-400 transition-colors"
+              className="relative w-full aspect-video rounded-2xl bg-white/10 flex items-center justify-center border-2 border-dashed border-white/20 overflow-hidden group cursor-pointer hover:border-white/40 transition-colors"
               onClick={triggerUpload}
             >
               {previewUrl ? (
                 <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
               ) : (
-                <div className="flex flex-col items-center text-slate-400">
+                <div className="flex flex-col items-center text-white/60">
                   <svg xmlns="http://www.w3.org/2000/svg" className="w-12 h-12 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -229,9 +229,9 @@ export const Scanner: React.FC<ScannerProps> = ({ onScan, onBarcodeScan, isProce
               )}
               
               {isProcessing && (
-                <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center animate-pulse">
-                  <div className="w-10 h-10 border-4 border-slate-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-                  <p className="text-slate-600 font-bold tracking-wider">AI AUDITING IN PROGRESS...</p>
+                <div className="absolute inset-0 bg-[#062034]/70 backdrop-blur-sm flex flex-col items-center justify-center animate-pulse">
+                  <div className="w-10 h-10 border-4 border-cyan-200 border-t-transparent rounded-full animate-spin mb-4"></div>
+                  <p className="text-white/80 font-bold tracking-wider">AI AUDITING IN PROGRESS...</p>
                 </div>
               )}
             </div>
@@ -249,7 +249,7 @@ export const Scanner: React.FC<ScannerProps> = ({ onScan, onBarcodeScan, isProce
               <button
                 onClick={triggerUpload}
                 disabled={isProcessing}
-                className="flex-1 bg-slate-700 hover:bg-slate-800 text-white font-semibold py-4 px-6 rounded-2xl transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2"
+                className="glass-button flex-1 bg-cyan-300 hover:bg-cyan-200 text-slate-900 font-semibold py-4 px-6 rounded-2xl transition-all shadow-lg shadow-cyan-500/30 active:scale-95 flex items-center justify-center gap-2"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
@@ -260,13 +260,13 @@ export const Scanner: React.FC<ScannerProps> = ({ onScan, onBarcodeScan, isProce
           </>
         ) : (
           <>
-            <div className="relative w-full aspect-video rounded-2xl bg-slate-100 border-2 border-dashed border-slate-300 overflow-hidden">
+            <div className="relative w-full aspect-video rounded-2xl bg-white/10 border-2 border-dashed border-white/20 overflow-hidden">
               {isCameraActive ? (
                 <video ref={videoRef} className="w-full h-full object-cover" muted playsInline />
               ) : previewUrl ? (
                 <img src={previewUrl} alt="Barcode Preview" className="w-full h-full object-cover" />
               ) : (
-                <div className="flex flex-col items-center justify-center h-full text-slate-400">
+                <div className="flex flex-col items-center justify-center h-full text-white/60">
                   <svg xmlns="http://www.w3.org/2000/svg" className="w-12 h-12 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 7h2v10H3M7 7v10m4-10v10m4-10v10m4-10h2v10h-2" />
                   </svg>
@@ -276,9 +276,9 @@ export const Scanner: React.FC<ScannerProps> = ({ onScan, onBarcodeScan, isProce
               )}
 
               {isProcessing && (
-                <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center animate-pulse">
-                  <div className="w-10 h-10 border-4 border-slate-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-                  <p className="text-slate-600 font-bold tracking-wider">FETCHING PRODUCT DATA...</p>
+                <div className="absolute inset-0 bg-[#062034]/70 backdrop-blur-sm flex flex-col items-center justify-center animate-pulse">
+                  <div className="w-10 h-10 border-4 border-cyan-200 border-t-transparent rounded-full animate-spin mb-4"></div>
+                  <p className="text-white/80 font-bold tracking-wider">FETCHING PRODUCT DATA...</p>
                 </div>
               )}
             </div>
@@ -293,7 +293,7 @@ export const Scanner: React.FC<ScannerProps> = ({ onScan, onBarcodeScan, isProce
             />
 
             {barcodeStatus && (
-              <div className="w-full text-center text-xs font-bold text-amber-600 bg-amber-50 border border-amber-200 rounded-xl py-2">
+              <div className="w-full text-center text-xs font-bold text-amber-200 bg-amber-500/20 border border-amber-400/40 rounded-xl py-2">
                 {barcodeStatus}
               </div>
             )}
@@ -302,10 +302,10 @@ export const Scanner: React.FC<ScannerProps> = ({ onScan, onBarcodeScan, isProce
               <button
                 onClick={isCameraActive ? stopCamera : startCameraScan}
                 disabled={isProcessing || cameraStatus === 'unsupported'}
-                className={`border font-bold py-4 rounded-2xl text-xs ${
+                className={`glass-button border font-bold py-4 rounded-2xl text-xs ${
                   cameraStatus === 'unsupported'
-                    ? 'bg-slate-50 border-slate-100 text-slate-300'
-                    : 'bg-white border-slate-200 text-slate-600'
+                    ? 'bg-white/5 border-white/10 text-white/30'
+                    : 'bg-white/10 border-white/10 text-white/80'
                 }`}
               >
                 {isCameraActive ? "Stop Camera" : "Scan with Camera"}
@@ -313,7 +313,7 @@ export const Scanner: React.FC<ScannerProps> = ({ onScan, onBarcodeScan, isProce
               <button
                 onClick={triggerBarcodeUpload}
                 disabled={isProcessing}
-                className="bg-slate-700 hover:bg-slate-800 text-white font-semibold py-4 px-6 rounded-2xl transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2"
+                className="glass-button bg-cyan-300 hover:bg-cyan-200 text-slate-900 font-semibold py-4 px-6 rounded-2xl transition-all shadow-lg shadow-cyan-500/30 active:scale-95 flex items-center justify-center gap-2"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
@@ -321,7 +321,7 @@ export const Scanner: React.FC<ScannerProps> = ({ onScan, onBarcodeScan, isProce
                 Upload Barcode Image
               </button>
             </div>
-            <div className="w-full text-center text-[10px] font-bold uppercase tracking-widest text-slate-400">
+            <div className="w-full text-center text-[10px] font-bold uppercase tracking-widest text-white/60">
               {cameraStatus === 'unsupported'
                 ? "Camera not available in this browser"
                 : cameraStatus === 'blocked'

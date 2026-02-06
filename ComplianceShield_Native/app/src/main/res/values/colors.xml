@@ -1,0 +1,6 @@
+<resources>
+    <color name="cs_blue_start">#0B5688</color>
+    <color name="cs_blue_mid">#0B6BA1</color>
+    <color name="cs_blue_end">#0A3F66</color>
+    <color name="cs_accent">#66E0FF</color>
+</resources>

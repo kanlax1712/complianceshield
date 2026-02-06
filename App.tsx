@@ -19,18 +19,18 @@ const FeedbackModal: React.FC<{
   const [comment, setComment] = useState('');
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-      <div className="bg-white w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl animate-in zoom-in duration-200">
-        <h3 className="text-xl font-black text-slate-900 mb-2">Report Audit Error</h3>
-        <p className="text-sm text-slate-500 mb-6">Help us improve the AI auditor for {item.productName}.</p>
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#051825]/70 backdrop-blur-sm">
+      <div className="surface-strong w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl animate-in zoom-in duration-200">
+        <h3 className="text-xl font-black text-white mb-2">Report Audit Error</h3>
+        <p className="text-sm text-slate-200 mb-6">Help us improve the AI auditor for {item.productName}.</p>
         
         <div className="space-y-4">
           <div>
-            <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Error Type</label>
+            <label className="block text-xs font-bold text-slate-200/70 uppercase mb-2">Error Type</label>
             <select 
               value={type} 
               onChange={(e) => setType(e.target.value as UserFeedback['type'])}
-              className="w-full bg-slate-50 border border-slate-200 p-3 rounded-xl outline-none focus:ring-2 ring-slate-400/20"
+              className="w-full bg-white/10 border border-white/20 p-3 rounded-xl outline-none focus:ring-2 ring-cyan-300/40 text-white"
             >
               <option value="Incorrect Expiry">Incorrect Expiry</option>
               <option value="Missed Allergen">Missed Allergen</option>
@@ -39,21 +39,21 @@ const FeedbackModal: React.FC<{
             </select>
           </div>
           <div>
-            <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Details</label>
+            <label className="block text-xs font-bold text-slate-200/70 uppercase mb-2">Details</label>
             <textarea 
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               placeholder="Explain what the AI missed..."
-              className="w-full bg-slate-50 border border-slate-200 p-3 rounded-xl h-24 outline-none focus:ring-2 ring-slate-400/20 resize-none"
+              className="w-full bg-white/10 border border-white/20 p-3 rounded-xl h-24 outline-none focus:ring-2 ring-cyan-300/40 resize-none text-white placeholder:text-white/50"
             />
           </div>
         </div>
 
         <div className="flex gap-3 mt-8">
-          <button onClick={onClose} className="flex-1 py-3 font-bold text-slate-500 hover:bg-slate-50 rounded-2xl transition-all">Cancel</button>
+          <button onClick={onClose} className="glass-button flex-1 py-3 font-bold text-white/70 hover:bg-white/10 rounded-2xl transition-all">Cancel</button>
           <button 
             onClick={() => onSubmit({ type, comment })}
-            className="flex-1 py-3 bg-slate-700 text-white font-bold rounded-2xl hover:bg-slate-800 shadow-xl shadow-slate-300 transition-all"
+            className="glass-button flex-1 py-3 bg-cyan-300 text-slate-900 font-bold rounded-2xl hover:bg-cyan-200 shadow-xl shadow-cyan-500/30 transition-all"
           >
             Submit Feedback
           </button>
@@ -65,16 +65,16 @@ const FeedbackModal: React.FC<{
 
 const ComplianceDetail: React.FC<{ item: InventoryItem; onReport: () => void }> = ({ item, onReport }) => {
   return (
-    <div className="p-4 sm:p-8 bg-slate-50 border-t border-slate-100 animate-in slide-in-from-top duration-300">
+    <div className="p-4 sm:p-8 bg-white/5 border-t border-white/10 animate-in slide-in-from-top duration-300">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-10">
         <div>
           <div className="flex items-center justify-between mb-4 sm:mb-6">
-            <h4 className="text-[10px] sm:text-sm font-black text-slate-400 uppercase tracking-widest">Regional Regulation Audit</h4>
-            <span className="text-[10px] bg-slate-700 text-white px-3 py-1 rounded-full font-black shadow-lg shadow-slate-200">{item.detectedRegion}</span>
+            <h4 className="text-[10px] sm:text-sm font-black text-white/60 uppercase tracking-widest">Regional Regulation Audit</h4>
+            <span className="text-[10px] bg-cyan-300 text-slate-900 px-3 py-1 rounded-full font-black shadow-lg shadow-cyan-500/30">{item.detectedRegion}</span>
           </div>
           <div className="space-y-3 sm:space-y-4">
             {item.detailedChecklist.map((check, idx) => (
-              <div key={idx} className="flex items-start gap-3 sm:gap-4 p-4 bg-white rounded-2xl border border-slate-200 shadow-sm hover:border-slate-300 transition-colors">
+              <div key={idx} className="flex items-start gap-3 sm:gap-4 p-4 surface rounded-2xl border border-white/10 shadow-sm hover:border-white/20 transition-colors">
                 <div className={`mt-1 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${
                   check.status === 'Passed' ? 'bg-emerald-100 text-emerald-600' : 
                   check.status === 'Failed' ? 'bg-red-100 text-red-600' : 'bg-amber-100 text-amber-600'
@@ -87,10 +87,10 @@ const ComplianceDetail: React.FC<{ item: InventoryItem; onReport: () => void }> 
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="font-black text-slate-800 text-sm tracking-tight">{check.requirement}</span>
-                    <span className="text-[10px] font-mono bg-slate-100 px-1.5 py-0.5 rounded text-slate-500">{check.regulationId}</span>
+                    <span className="font-black text-white text-sm tracking-tight">{check.requirement}</span>
+                    <span className="text-[10px] font-mono bg-white/10 px-1.5 py-0.5 rounded text-white/60">{check.regulationId}</span>
                   </div>
-                  <p className="text-xs text-slate-500 leading-relaxed">{check.details}</p>
+                  <p className="text-xs text-white/60 leading-relaxed">{check.details}</p>
                 </div>
               </div>
             ))}
@@ -99,8 +99,8 @@ const ComplianceDetail: React.FC<{ item: InventoryItem; onReport: () => void }> 
 
         <div>
           <div className="flex items-center justify-between mb-4 sm:mb-6">
-            <h4 className="text-[10px] sm:text-sm font-black text-slate-400 uppercase tracking-widest">Clinical Risk Profile</h4>
-            <span className="text-[9px] font-bold text-slate-400 uppercase">*Medical Audit</span>
+            <h4 className="text-[10px] sm:text-sm font-black text-white/60 uppercase tracking-widest">Clinical Risk Profile</h4>
+            <span className="text-[9px] font-bold text-white/50 uppercase">*Medical Audit</span>
           </div>
           <div className="space-y-3 sm:space-y-4">
             {(['diabetes', 'bp', 'heart'] as const).map((key) => {
@@ -110,24 +110,24 @@ const ComplianceDetail: React.FC<{ item: InventoryItem; onReport: () => void }> 
               const riskColor = data.risk === 'High' ? 'bg-red-500' : data.risk === 'Medium' ? 'bg-amber-500' : 'bg-emerald-500';
 
               return (
-                <div key={key} className="p-5 bg-white rounded-3xl border border-slate-200 shadow-sm relative overflow-hidden">
+                <div key={key} className="p-5 surface rounded-3xl border border-white/10 shadow-sm relative overflow-hidden">
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
                        <span className={`w-2 h-2 rounded-full ${riskColor}`}></span>
-                       <span className="text-xs font-black text-slate-900 uppercase tracking-tight">{label}</span>
+                       <span className="text-xs font-black text-white uppercase tracking-tight">{label}</span>
                     </div>
                     <span className={`text-[10px] font-black px-2 py-0.5 rounded-full ${
-                      data.risk === 'High' ? 'bg-red-50 text-red-600' :
-                      data.risk === 'Medium' ? 'bg-amber-50 text-amber-600' :
-                      'bg-emerald-50 text-emerald-600'
+                      data.risk === 'High' ? 'bg-rose-500/20 text-rose-200' :
+                      data.risk === 'Medium' ? 'bg-amber-400/20 text-amber-200' :
+                      'bg-emerald-400/20 text-emerald-200'
                     }`}>
                       {data.risk}
                     </span>
                   </div>
-                  <div className="w-full h-1.5 bg-slate-100 rounded-full mb-3 overflow-hidden">
+                  <div className="w-full h-1.5 bg-white/10 rounded-full mb-3 overflow-hidden">
                     <div className={`h-full transition-all duration-1000 ${riskColor}`} style={{ width: `${riskPercent}%` }}></div>
                   </div>
-                  <p className="text-[11px] text-slate-500 leading-snug">{data.reason}</p>
+                  <p className="text-[11px] text-white/60 leading-snug">{data.reason}</p>
                 </div>
               );
             })}
@@ -135,24 +135,24 @@ const ComplianceDetail: React.FC<{ item: InventoryItem; onReport: () => void }> 
         </div>
 
         <div>
-          <h4 className="text-[10px] sm:text-sm font-black text-slate-400 uppercase tracking-widest mb-4 sm:mb-6">AI Safety Profile</h4>
-          <div className="bg-white p-6 rounded-[2rem] border border-slate-200 shadow-sm relative overflow-hidden ring-1 ring-slate-100">
+          <h4 className="text-[10px] sm:text-sm font-black text-white/60 uppercase tracking-widest mb-4 sm:mb-6">AI Safety Profile</h4>
+          <div className="surface p-6 rounded-[2rem] border border-white/10 shadow-sm relative overflow-hidden ring-1 ring-white/10">
             <div className="flex items-center gap-5 mb-6">
               <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl font-black shadow-inner ${
-                item.safetyScore > 80 ? 'bg-emerald-50 text-emerald-600' : 
-                item.safetyScore > 50 ? 'bg-amber-50 text-amber-600' : 'bg-red-50 text-red-600'
+                item.safetyScore > 80 ? 'bg-emerald-400/20 text-emerald-200' : 
+                item.safetyScore > 50 ? 'bg-amber-400/20 text-amber-200' : 'bg-rose-500/20 text-rose-200'
               }`}>
                 {item.safetyScore}
               </div>
               <div className="flex-1">
-                <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">AI Recommendation</div>
-                <div className="text-slate-900 font-bold leading-tight">{item.recommendation}</div>
+                <div className="text-[10px] font-black text-white/60 uppercase tracking-widest mb-1">AI Recommendation</div>
+                <div className="text-white font-bold leading-tight">{item.recommendation}</div>
               </div>
             </div>
 
             <button 
               onClick={onReport}
-              className="w-full py-3 border-2 border-dashed border-slate-200 text-slate-400 hover:border-slate-300 hover:text-slate-600 font-bold text-xs rounded-2xl transition-all flex items-center justify-center gap-2"
+              className="glass-button w-full py-3 border-2 border-dashed border-white/20 text-white/60 hover:border-white/40 hover:text-white font-bold text-xs rounded-2xl transition-all flex items-center justify-center gap-2"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
               Report Audit Correction
@@ -349,9 +349,9 @@ const App: React.FC = () => {
       <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.78-8.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
     );
 
-    let colorClass = 'bg-emerald-50 text-emerald-600 border-emerald-100/50';
-    if (risk === 'High') colorClass = 'bg-red-50 text-red-600 border-red-200/50';
-    if (risk === 'Medium') colorClass = 'bg-amber-50 text-amber-700 border-amber-200/50';
+    let colorClass = 'bg-emerald-400/20 text-emerald-200 border-emerald-400/40';
+    if (risk === 'High') colorClass = 'bg-rose-500/20 text-rose-200 border-rose-400/40';
+    if (risk === 'Medium') colorClass = 'bg-amber-400/20 text-amber-200 border-amber-400/40';
 
     return (
       <div key={key} className={`flex items-center gap-1 px-1.5 py-0.5 rounded-lg border font-black text-[8px] tracking-tight ${colorClass}`}>
@@ -362,21 +362,21 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-32">
-      <nav className="sticky top-0 z-[60] bg-white border-b border-slate-200 shadow-sm px-4 py-3">
+    <div className="min-h-screen bg-gradient-to-b from-[#0b5688] via-[#0b6ba1] to-[#0a3f66] pb-32 text-slate-100">
+      <nav className="sticky top-0 z-[60] bg-white/10 border-b border-white/10 backdrop-blur-md shadow-sm px-4 py-3">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-slate-700 rounded-2xl flex items-center justify-center text-white shadow-lg rotate-3">
+            <div className="w-10 h-10 bg-cyan-300 rounded-2xl flex items-center justify-center text-slate-900 shadow-lg rotate-3">
               <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/>
               </svg>
             </div>
             <div>
-              <h1 className="text-sm font-black text-slate-900 leading-none">ComplianceShield</h1>
-              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{user.phone}</span>
+              <h1 className="text-sm font-black text-white leading-none">ComplianceShield</h1>
+              <span className="text-[9px] font-bold text-white/60 uppercase tracking-widest">{user.phone}</span>
             </div>
           </div>
-          <button onClick={handleLogout} className="p-2 text-slate-300 hover:text-red-500 transition-colors">
+          <button onClick={handleLogout} className="glass-button p-2 text-white/60 hover:text-rose-200 transition-colors rounded-xl">
             <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
           </button>
         </div>
@@ -384,8 +384,8 @@ const App: React.FC = () => {
 
       <main className="max-w-7xl mx-auto px-4 py-8">
         <div className="mb-8">
-          <h2 className="text-3xl font-black text-slate-900 tracking-tight leading-none mb-2">Inventory <span className="text-slate-700">Audit</span></h2>
-          <p className="text-slate-500 text-xs font-medium">Production mobile compliance infrastructure.</p>
+          <h2 className="text-3xl font-black text-white tracking-tight leading-none mb-2">Inventory <span className="text-cyan-200">Audit</span></h2>
+          <p className="text-white/60 text-xs font-medium">Production mobile compliance infrastructure.</p>
         </div>
 
         {showScanner ? (
@@ -396,7 +396,7 @@ const App: React.FC = () => {
               isProcessing={isProcessing}
               initialMode={scanMode}
             />
-            <button onClick={() => setShowScanner(false)} className="w-full mt-4 text-xs font-bold text-slate-400">Cancel Scan</button>
+            <button onClick={() => setShowScanner(false)} className="glass-button w-full mt-4 text-xs font-bold text-white/60 rounded-2xl py-2">Cancel Scan</button>
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-3 mb-10">
@@ -405,7 +405,7 @@ const App: React.FC = () => {
                 setScanMode('label');
                 setShowScanner(true);
               }}
-              className="bg-slate-700 text-white font-black py-5 rounded-3xl shadow-xl flex items-center justify-center gap-3"
+              className="glass-button bg-cyan-300 text-slate-900 font-black py-5 rounded-3xl shadow-xl shadow-cyan-500/30 flex items-center justify-center gap-3"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                 <path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
@@ -418,15 +418,15 @@ const App: React.FC = () => {
                 setScanMode('barcode');
                 setShowScanner(true);
               }}
-              className="bg-white border border-slate-200 text-slate-600 font-bold py-5 rounded-3xl shadow-sm flex items-center justify-center gap-3"
+              className="glass-button bg-white/10 border border-white/10 text-white/80 font-bold py-5 rounded-3xl shadow-sm flex items-center justify-center gap-3"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                 <path d="M3 7h2v10H3M7 7v10m4-10v10m4-10v10m4-10h2v10h-2" />
               </svg>
               Barcode Scanner
             </button>
-            <button onClick={downloadReport} className="bg-white border border-slate-200 text-slate-600 font-bold py-4 rounded-3xl text-xs">Export Report</button>
-            <div className="bg-slate-100 border border-slate-200 rounded-3xl flex items-center justify-center text-slate-700 font-black text-sm">{inventory.length} SKUs</div>
+            <button onClick={downloadReport} className="glass-button bg-white/10 border border-white/10 text-white/80 font-bold py-4 rounded-3xl text-xs">Export Report</button>
+            <div className="bg-white/10 border border-white/10 rounded-3xl flex items-center justify-center text-white font-black text-sm">{inventory.length} SKUs</div>
           </div>
         )}
 
@@ -434,28 +434,28 @@ const App: React.FC = () => {
 
         <div className="space-y-4">
           {inventory.length === 0 ? (
-            <div className="text-center py-20 bg-white rounded-[2.5rem] border border-slate-100 border-dashed">
-              <p className="text-slate-400 font-black text-xs uppercase tracking-widest">No Active Audits</p>
+            <div className="text-center py-20 surface rounded-[2.5rem] border border-white/10 border-dashed">
+              <p className="text-white/60 font-black text-xs uppercase tracking-widest">No Active Audits</p>
             </div>
           ) : (
             inventory.map((item) => (
-              <div key={item.id} className="bg-white rounded-[2rem] shadow-sm border border-slate-100 overflow-hidden">
-                <div onClick={() => setExpandedId(expandedId === item.id ? null : item.id)} className="p-4 flex items-start gap-4 cursor-pointer hover:bg-slate-50 transition-colors">
-                  <img src={item.imageUrl} className="w-20 h-20 rounded-2xl object-cover border border-slate-100 shadow-sm" />
+              <div key={item.id} className="surface rounded-[2rem] shadow-sm border border-white/10 overflow-hidden">
+                <div onClick={() => setExpandedId(expandedId === item.id ? null : item.id)} className="p-4 flex items-start gap-4 cursor-pointer hover:bg-white/5 transition-colors">
+                  <img src={item.imageUrl} className="w-20 h-20 rounded-2xl object-cover border border-white/10 shadow-sm" />
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-start mb-1">
-                      <h3 className="font-black text-slate-900 text-sm truncate pr-2">{item.productName}</h3>
-                      <span className={`text-[10px] font-black shrink-0 ${item.safetyScore > 80 ? 'text-emerald-500' : 'text-amber-500'}`}>{item.safetyScore}%</span>
+                      <h3 className="font-black text-white text-sm truncate pr-2">{item.productName}</h3>
+                      <span className={`text-[10px] font-black shrink-0 ${item.safetyScore > 80 ? 'text-emerald-300' : 'text-amber-300'}`}>{item.safetyScore}%</span>
                     </div>
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter mb-2">{item.brand} • {item.detectedRegion}</p>
+                    <p className="text-[10px] font-bold text-white/60 uppercase tracking-tighter mb-2">{item.brand} • {item.detectedRegion}</p>
                     
                     {/* RESTORED: Expiry and Ingredients in Collapsed View */}
                     <div className="flex flex-col gap-2 mb-3">
                       <div className="flex items-center gap-2">
-                        <span className={`text-[9px] font-black px-2 py-0.5 rounded-full ring-1 ${item.isExpired ? 'bg-red-600 text-white ring-red-700' : 'bg-emerald-50 text-emerald-600 ring-emerald-100'}`}>
+                        <span className={`text-[9px] font-black px-2 py-0.5 rounded-full ring-1 ${item.isExpired ? 'bg-rose-500 text-white ring-rose-400/50' : 'bg-emerald-400/20 text-emerald-200 ring-emerald-400/40'}`}>
                           {item.expiryDate || 'N/A'}
                         </span>
-                        <span className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">{item.targetAudience}</span>
+                        <span className="text-[9px] font-bold text-white/40 uppercase tracking-widest">{item.targetAudience}</span>
                       </div>
                       
                       <div className="flex flex-wrap gap-1">
@@ -465,7 +465,7 @@ const App: React.FC = () => {
                             className={`text-[9px] font-black px-1.5 py-0.5 rounded border ${
                               item.riskyIngredients.some(ri => ri.name.toLowerCase() === ing.toLowerCase())
                                 ? 'bg-amber-100 border-amber-300 text-amber-800'
-                                : 'bg-slate-50 border-slate-200 text-slate-700'
+                                : 'bg-white/10 border-white/10 text-white/80'
                             }`}
                           >
                             {ing}
@@ -474,7 +474,7 @@ const App: React.FC = () => {
                         {item.ingredients.length > 3 && (
                           <button
                             onClick={(e) => toggleIngredients(item.id, e)}
-                            className="text-[9px] font-black text-slate-500 hover:text-slate-700"
+                            className="glass-button text-[9px] font-black text-white/60 hover:text-white rounded-lg px-1.5 py-0.5"
                           >
                             {expandedIngredients[item.id]
                               ? "Show less"
@@ -489,10 +489,10 @@ const App: React.FC = () => {
                     </div>
                   </div>
                   <div className="flex flex-col items-center justify-between self-stretch py-1">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${item.isRegulatorilyCompliant ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'}`}>
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${item.isRegulatorilyCompliant ? 'bg-emerald-400/20 text-emerald-200' : 'bg-rose-500/20 text-rose-200'}`}>
                       {item.isRegulatorilyCompliant ? <svg className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg> : <svg className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"/></svg>}
                     </div>
-                    <button onClick={(e) => deleteItem(item.id, e)} className="text-slate-200 hover:text-red-500 transition-colors"><svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
+                    <button onClick={(e) => deleteItem(item.id, e)} className="glass-button text-white/40 hover:text-rose-200 transition-colors rounded-xl p-1"><svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
                   </div>
                 </div>
                 {expandedId === item.id && (
